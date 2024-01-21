@@ -1,0 +1,51 @@
+---
+import { weaviateClient } from "@src/lib/weaviate";
+import { Debug } from "astro:components";
+import Layout from "@src/components/Layout.astro";
+import MixesList from "@src/components/MixesList.astro";
+import MixDetail from "@src/components/MixDetail.astro";
+
+const mixId = Astro.params.id;
+
+const mixDetailFields =
+    "mixId title blurb content contentUrl date imageUrl iframe hyperlinkUrl _additional { id }";
+
+// find mix with property mixId
+const mixData = await weaviateClient.graphql
+    .get()
+    .withClassName("Mix")
+    .withWhere({
+        path: ["mixId"],
+        operator: "Equal",
+        valueText: mixId,
+    })
+    .withLimit(1)
+    .withFields(mixDetailFields)
+    .do();
+
+const mix = mixData.data.Get.Mix[0];
+
+const weaviateMixId = mix._additional.id;
+
+const searchFields =
+    "mixId title textForEmbedding blurb imageUrl iframe hyperlinkUrl";
+
+const similarMixes = await weaviateClient.graphql
+    .get()
+    .withClassName("Mix")
+    .withFields(searchFields)
+    .withNearObject({
+        id: weaviateMixId,
+    })
+    .withLimit(20)
+    .do();
+---
+
+<Layout>
+    <MixDetail {mix} />
+    <h2>Similar mixes</h2>
+    <p>The mixes below have similar descriptions.</p>
+    <MixesList mixes={similarMixes.data.Get.Mix} />
+    <Debug {mix} />
+    <Debug {similarMixes} />
+</Layout>

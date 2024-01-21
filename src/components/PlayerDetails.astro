@@ -1,0 +1,30 @@
+---
+const { mix, mixId } = Astro.props;
+---
+
+{
+    mix ? (
+        <details open class="sticky" id="player-details">
+            <summary>
+                Playing:{" "}
+                <a
+                    hx-boost="true"
+                    hx-select="main"
+                    hx-target="main"
+                    href={`/mix/${mixId}`}
+                >
+                    {mix.title}
+                </a>
+            </summary>
+            <div
+                id="player"
+                class="animate-loading-background-for-child-iframe"
+                set:html={mix.iframe}
+            />
+        </details>
+    ) : (
+        <div id="player-details">
+            Click 'Play' on a mix to play while you browse
+        </div>
+    )
+}

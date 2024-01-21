@@ -1,0 +1,96 @@
+html {
+    font-family: sans-serif;
+    line-height: 1.5;
+    background-color: lightgray;
+}
+
+body {
+    max-width: 60rem;
+    margin: 0 auto;
+    background-color: white;
+    padding: 2rem;
+}
+
+.animate-loading-background,
+.animate-loading-background-for-child-iframe iframe {
+    /* animated loading background */
+    background: linear-gradient(90deg, #ccc 0%, #fff 50%, #ccc 100%);
+    animation: pulse 2s infinite;
+    background-size: 400% 400%;
+}
+
+@keyframes pulse {
+    0% {
+        background-position: 100% 0;
+    }
+
+    100% {
+        background-position: 0 0;
+    }
+}
+
+img.cover {
+    object-fit: cover;
+}
+
+.image-and-text-flex {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.image-and-text-flex>.text {
+    flex-basis: 36rem;
+}
+
+.image-and-text-flex>.text> :first-child {
+    margin-top: 0;
+}
+
+.mixes-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-gap: 1rem;
+
+    list-style: none;
+    padding: 0;
+}
+
+.stretch-link-container {
+    position: relative;
+}
+
+.stretch-link-container a.stretch-link::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: "";
+    width: 100%;
+    display: block;
+}
+
+.stretch-link-container a.stretch-link {
+    z-index: 1;
+}
+
+.z-index-above-stretch-link {
+    position: relative;
+    z-index: 2;
+}
+
+#player-details {
+    background-color: white;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid black;
+    margin-left: -2rem;
+    margin-right: -2rem;
+}
+
+#player-details.sticky {
+    position: sticky;
+    bottom: 0;
+    z-index: 3;
+}

@@ -1,0 +1,24 @@
+---
+import PlayMixButton from "./PlayMixButton.astro";
+const { mix } = Astro.props;
+---
+
+<li class="stretch-link-container">
+    <img
+        src={mix.imageUrl}
+        width="100"
+        height="100"
+        loading="lazy"
+        class="cover animate-loading-background"
+    /><br />
+    <a
+        data-astro-prefetch
+        hx-boost="true"
+        hx-target="main"
+        hx-select="main"
+        class="stretch-link"
+        href={`/mix/${mix.mixId}`}>{mix.title}</a
+    ><br />
+    {mix.blurb}
+    <PlayMixButton {mix} />
+</li>

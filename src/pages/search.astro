@@ -1,0 +1,91 @@
+---
+import { weaviateClient } from "@src/lib/weaviate";
+import { Debug } from "astro:components";
+
+import Layout from "@src/components/Layout.astro";
+import MixesList from "@src/components/MixesList.astro";
+
+const searchQuery = Astro.url.searchParams.get("q");
+const negativeSearchQuery = Astro.url.searchParams.get("not");
+const searchType = Astro.url.searchParams.get("type") || "hybrid";
+
+const pageNumStr = Astro.url.searchParams.get("page-num") || "1";
+const pageNum = parseInt(pageNumStr, 10);
+
+const perPageStr = Astro.url.searchParams.get("per-page") || "20";
+const perPage = parseInt(perPageStr, 10);
+const offset = (pageNum - 1) * perPage;
+
+if (!searchQuery) {
+	return {
+		status: 400,
+		body: "Missing query parameter 'q'",
+	};
+}
+
+const searchFields =
+	"mixId title textForEmbedding blurb imageUrl iframe hyperlinkUrl";
+
+let weaviateSearch = weaviateClient.graphql
+	.get()
+	.withClassName("Mix")
+	.withFields(searchFields)
+	.withLimit(perPage)
+	.withOffset(offset);
+
+if (searchType === "hybrid") {
+	weaviateSearch = weaviateSearch.withHybrid({
+		query: searchQuery,
+	});
+} else {
+	const positiveConcepts = searchQuery.split(" AND ");
+	const negativeConcepts = negativeSearchQuery?.split(" AND ") || [];
+
+	weaviateSearch = weaviateSearch.withNearText({
+		concepts: positiveConcepts,
+		moveAwayFrom: {
+			concepts: negativeConcepts,
+			force: 1,
+		},
+	});
+}
+
+if (negativeSearchQuery) {
+}
+
+const searchData = await weaviateSearch.do();
+
+const mixes = searchData?.data?.Get?.Mix || [];
+
+const nextPageParams = Astro.url.searchParams;
+nextPageParams.set("page-num", pageNum + 1);
+const nextPageUrl = `/search?${nextPageParams.toString()}`;
+
+const previousPageParams = Astro.url.searchParams;
+previousPageParams.set("page-num", pageNum - 1);
+const previousPageUrl = `/search?${previousPageParams.toString()}`;
+---
+
+<Layout {searchType} {searchQuery} {negativeSearchQuery}>
+	<h2>Search results</h2>
+	<MixesList {mixes} />
+	{
+		pageNum > 1 && (
+			<a
+				href={previousPageUrl}
+				hx-boost="true"
+				hx-select="#page-container"
+				hx-target="#page-container"
+			>
+				Previous page
+			</a>
+		)
+	}
+	<a
+		href={nextPageUrl}
+		hx-boost="true"
+		hx-select="#page-container"
+		hx-target="#page-container">Next page</a
+	>
+	<Debug {mixes} />
+</Layout>

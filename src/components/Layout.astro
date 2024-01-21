@@ -1,0 +1,76 @@
+---
+import Htmx from "htmx.org/dist/htmx.min.js?url";
+import PlayerDetails from "./PlayerDetails.astro";
+import "@src/styles/global.css";
+const { searchQuery, negativeSearchQuery, searchType, perPage } = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Mix of the Day Explorer</title>
+		<script src={Htmx} type="module" is:inline></script>
+	</head>
+	<body>
+		<h1>Mix of the Day Explorer</h1>
+		<div id="page-container">
+			<form
+				hx-boost="true"
+				hx-target="#page-container"
+				hx-select="#page-container"
+				method="GET"
+				action="/search"
+				id="search-form"
+			>
+				<label for="search-input"><strong>Search query</strong></label>
+				<input
+					type="text"
+					name="q"
+					id="search-input"
+					value={searchQuery}
+				/><br />
+				<label for="negative-search-input"
+					><strong>Exclude</strong></label
+				>
+				<input
+					type="text"
+					name="not"
+					id="negative-search-input"
+					value={negativeSearchQuery}
+				/><br />
+				<label><strong>Search type</strong></label>
+				<input
+					name="type"
+					type="radio"
+					value="hybrid"
+					id="hybrid-radio"
+					checked={searchType === "hybrid" ||
+						searchType === undefined}
+				/>
+				<label for="hybrid-radio">Hybrid (keyword + vibe)</label>
+				<input
+					name="type"
+					type="radio"
+					value="vector"
+					id="vector-radio"
+					checked={searchType === "vector"}
+				/>
+				<label for="vector-radio">Vector (vibe)</label><br />
+				<label>Items per page</label>
+				<select name="per-page">
+					<option value="20" selected={perPage === 20}>20</option>
+					<option value="50" selected={perPage === 50}>50</option>
+					<option value="100" selected={perPage === 100}>100</option>
+				</select>
+				<button>Search</button>
+			</form>
+			<main>
+				<slot />
+			</main>
+		</div>
+		<PlayerDetails />
+	</body>
+</html>

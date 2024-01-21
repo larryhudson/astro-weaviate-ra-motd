@@ -1,0 +1,20 @@
+---
+const { mix } = Astro.props;
+---
+
+{
+    mix.iframe ? (
+        <button
+            hx-get={`/mix/${mix.mixId}/play`}
+            hx-target="#player-details"
+            hx-swap="outerHTML"
+            class="z-index-above-stretch-link"
+        >
+            Play
+        </button>
+    ) : (
+        <a href={mix.hyperlinkUrl} target="_blank">
+            Play (external link)
+        </a>
+    )
+}
