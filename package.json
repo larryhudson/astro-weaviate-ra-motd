@@ -18,6 +18,8 @@
     "llm-chunk": "^0.0.1",
     "prettier": "^3.1.1",
     "prettier-plugin-astro": "^0.12.2",
+    "stream-chain": "^2.2.5",
+    "stream-json": "^1.8.0",
     "typescript": "^5.3.3",
     "weaviate-ts-embedded": "^1.2.0"
   },
