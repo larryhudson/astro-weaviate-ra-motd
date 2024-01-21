@@ -4,6 +4,7 @@ import { ingestBatch } from "@src/lib/weaviate/ingest_batch";
 
 if (Astro.request.method === "POST") {
     const jsonFilePath = import.meta.env.VITE_JSON_DATA_PATH;
+    console.log(`Reading JSON data from ${jsonFilePath}`);
     const jsonStr = fs.readFileSync(jsonFilePath, "utf8");
     console.log(jsonStr);
     const mixes = JSON.parse(jsonStr);
