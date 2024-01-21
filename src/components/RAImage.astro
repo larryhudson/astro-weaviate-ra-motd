@@ -1,0 +1,16 @@
+---
+const { src, width, height, quality } = Astro.props;
+
+const originalImageUrlBase64 = btoa(src);
+
+const imageUrl = `https://imgproxy.ra.co/_/quality:${quality}/w:${width}/h:${height}/rt:fill/${originalImageUrlBase64}`;
+---
+
+<img
+    src={imageUrl}
+    alt=""
+    {height}
+    {width}
+    loading="lazy"
+    class="animate-loading-background"
+/>

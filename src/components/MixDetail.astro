@@ -1,6 +1,7 @@
 ---
 import { Debug } from "astro:components";
 import PlayMixButton from "./PlayMixButton.astro";
+import RAImage from "./RAImage.astro";
 /*
 example mix:
 {
@@ -25,7 +26,8 @@ const { mix } = Astro.props;
 
 <div class="image-and-text-flex">
     <div>
-        <img class="cover" width="200" height="200" src={mix.imageUrl} />
+        <RAImage src={mix.imageUrl} height="200" width="200" quality="100" /><br
+        />
     </div>
     <div class="text">
         <p><strong>{mix.blurb}</strong></p>

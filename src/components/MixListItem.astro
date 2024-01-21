@@ -1,16 +1,12 @@
 ---
 import PlayMixButton from "./PlayMixButton.astro";
+import RAImage from "./RAImage.astro";
+
 const { mix } = Astro.props;
 ---
 
 <li class="stretch-link-container">
-    <img
-        src={mix.imageUrl}
-        width="100"
-        height="100"
-        loading="lazy"
-        class="cover animate-loading-background"
-    /><br />
+    <RAImage src={mix.imageUrl} height="112" width="200" quality="80" /><br />
     <a
         data-astro-prefetch
         hx-boost="true"
