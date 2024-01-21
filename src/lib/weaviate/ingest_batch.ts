@@ -10,7 +10,7 @@ export async function importMixesFromJson(filePath) {
   let counter = 0;
   const batchSize = 20;
 
-  async function addMix(mix: object): Promise<void> {
+  async function addMix(mix: any): Promise<void> {
     const dataObj = {
       mixId: mix.id,
       imageUrl: mix.imageUrl,
