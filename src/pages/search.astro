@@ -17,37 +17,37 @@ const perPage = parseInt(perPageStr, 10);
 const offset = (pageNum - 1) * perPage;
 
 if (!searchQuery) {
-	return {
-		status: 400,
-		body: "Missing query parameter 'q'",
-	};
+  return {
+    status: 400,
+    body: "Missing query parameter 'q'",
+  };
 }
 
 const searchFields =
-	"mixId title textForEmbedding blurb imageUrl iframe hyperlinkUrl";
+  "mixId title textForEmbedding blurb imageUrl iframe hyperlinkUrl";
 
 let weaviateSearch = weaviateClient.graphql
-	.get()
-	.withClassName("Mix")
-	.withFields(searchFields)
-	.withLimit(perPage)
-	.withOffset(offset);
+  .get()
+  .withClassName("Mix")
+  .withFields(searchFields)
+  .withLimit(perPage)
+  .withOffset(offset);
 
 if (searchType === "hybrid") {
-	weaviateSearch = weaviateSearch.withHybrid({
-		query: searchQuery,
-	});
+  weaviateSearch = weaviateSearch.withHybrid({
+    query: searchQuery,
+  });
 } else {
-	const positiveConcepts = searchQuery.split(" AND ");
-	const negativeConcepts = negativeSearchQuery?.split(" AND ") || [];
+  const positiveConcepts = searchQuery.split(" AND ");
+  const negativeConcepts = negativeSearchQuery?.split(" AND ") || [];
 
-	weaviateSearch = weaviateSearch.withNearText({
-		concepts: positiveConcepts,
-		moveAwayFrom: {
-			concepts: negativeConcepts,
-			force: 1,
-		},
-	});
+  weaviateSearch = weaviateSearch.withNearText({
+    concepts: positiveConcepts,
+    moveAwayFrom: {
+      concepts: negativeConcepts,
+      force: 1,
+    },
+  });
 }
 
 if (negativeSearchQuery) {
@@ -67,25 +67,24 @@ const previousPageUrl = `/search?${previousPageParams.toString()}`;
 ---
 
 <Layout {searchType} {searchQuery} {negativeSearchQuery}>
-	<h2>Search results</h2>
-	<MixesList {mixes} />
-	{
-		pageNum > 1 && (
-			<a
-				href={previousPageUrl}
-				hx-boost="true"
-				hx-select="#page-container"
-				hx-target="#page-container"
-			>
-				Previous page
-			</a>
-		)
-	}
-	<a
-		href={nextPageUrl}
-		hx-boost="true"
-		hx-select="#page-container"
-		hx-target="#page-container">Next page</a
-	>
-	<Debug {mixes} />
+  <h2>Search results</h2>
+  <MixesList {mixes} />
+  {
+    pageNum > 1 && (
+      <a
+        href={previousPageUrl}
+        hx-boost="true"
+        hx-select="#page-container"
+        hx-target="#page-container"
+      >
+        Previous page
+      </a>
+    )
+  }
+  <a
+    href={nextPageUrl}
+    hx-boost="true"
+    hx-select="#page-container"
+    hx-target="#page-container">Next page</a
+  >
 </Layout>
