@@ -38,8 +38,11 @@ export async function importMixesFromJson(filePath) {
 
       // Handle errors
       for (const r of response)
-        if (r.result.errors)
+        if (r.result.errors) {
+          console.log(r.result.errors)
           throw r.result.errors;
+        }
+
 
       console.log(`Imported ${counter} articles...`);
     }
