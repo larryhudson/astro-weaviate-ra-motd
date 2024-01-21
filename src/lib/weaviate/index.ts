@@ -12,7 +12,7 @@ export const weaviateClient = weaviate.client(
     port: 9898,
     env: {
       DEFAULT_VECTORIZER_MODULE: "text2vec-openai",
-      OPENAI_APIKEY: import.meta?.env?.VITE_OPENAI_APIKEY || process.env.VITE_OPENAI_APIKEY,
+      OPENAI_APIKEY: import.meta.env.VITE_OPENAI_APIKEY,
     },
   }),
   {
@@ -20,6 +20,8 @@ export const weaviateClient = weaviate.client(
     host: "127.0.0.1:9898",
   },
 );
+
+console.log(weaviateClient.embedded.options.env)
 
 await weaviateClient.embedded.start();
 await initialiseWeaviate(weaviateClient);

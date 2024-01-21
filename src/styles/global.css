@@ -94,3 +94,7 @@ img.cover {
     bottom: 0;
     z-index: 3;
 }
+
+iframe {
+    max-width: 100%;
+}

@@ -19,6 +19,9 @@ const { mix } = Astro.props;
         class="stretch-link"
         href={`/mix/${mix.mixId}`}>{mix.title}</a
     ><br />
+    <span style="font-size:smaller; font-family: monospace"
+        >{mix.date?.split("T")[0]}</span
+    ><br />
     {mix.blurb}
     <PlayMixButton {mix} />
 </li>

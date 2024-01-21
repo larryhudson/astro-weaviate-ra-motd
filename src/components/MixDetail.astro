@@ -20,7 +20,7 @@ example mix:
 const { mix } = Astro.props;
 ---
 
-<h2>{mix.title}</h2>
+<h2>{mix.title} ({mix.date?.split("T")[0]})</h2>
 <PlayMixButton {mix} />
 
 <div class="image-and-text-flex">
