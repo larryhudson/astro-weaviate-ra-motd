@@ -58,11 +58,11 @@ const searchData = await weaviateSearch.do();
 const mixes = searchData?.data?.Get?.Mix || [];
 
 const nextPageParams = Astro.url.searchParams;
-nextPageParams.set("page-num", pageNum + 1);
+nextPageParams.set("page-num", String(pageNum + 1));
 const nextPageUrl = `/search?${nextPageParams.toString()}`;
 
 const previousPageParams = Astro.url.searchParams;
-previousPageParams.set("page-num", pageNum - 1);
+previousPageParams.set("page-num", String(pageNum - 1));
 const previousPageUrl = `/search?${previousPageParams.toString()}`;
 ---
 

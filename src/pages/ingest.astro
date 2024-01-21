@@ -1,5 +1,5 @@
 ---
-import fs from "fs";
+import fs from "node:fs";
 import { ingestBatch } from "@src/lib/weaviate/ingest_batch";
 
 const password = Astro.url.searchParams.get("password");

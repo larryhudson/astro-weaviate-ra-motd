@@ -19,5 +19,8 @@
     "prettier-plugin-astro": "^0.12.2",
     "typescript": "^5.3.3",
     "weaviate-ts-embedded": "^1.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5"
   }
 }
