@@ -4,14 +4,14 @@ import { ingestBatch } from "@src/lib/weaviate/ingest_batch";
 
 const password = Astro.url.searchParams.get("password");
 
-const correctPassword = import.meta.env.INGEST_PASSWORD;
+const correctPassword = import.meta.env.VITE_INGEST_PASSWORD;
 
 if (password !== correctPassword) {
     return new Response("Wrong password", { status: 401 });
 }
 
 if (Astro.request.method === "POST") {
-    const jsonFilePath = import.meta.env.DATA_JSON_FILE_PATH;
+    const jsonFilePath = import.meta.env.VITE_JSON_DATA_PATH;
     const jsonStr = fs.readFileSync(jsonFilePath, "utf8");
     console.log(jsonStr);
     const mixes = JSON.parse(jsonStr);
