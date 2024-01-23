@@ -1,28 +1,15 @@
 ---
-import { weaviateClient } from "@src/lib/weaviate";
+import { getMixById } from "@src/lib/weaviate/query";
 import PlayerDetails from "@src/components/PlayerDetails.astro";
 
-const mixId = Astro.params.id;
-
-const mixDetailFields =
-    "mixId title blurb content contentUrl imageUrl iframe hyperlinkUrl _additional { id }";
+const weaviateObjectId = Astro.params.id;
 
 // find mix with property mixId
-const mixData = await weaviateClient.graphql
-    .get()
-    .withClassName("Mix")
-    .withWhere({
-        path: ["mixId"],
-        operator: "Equal",
-        valueText: mixId,
-    })
-    .withLimit(1)
-    .withFields(mixDetailFields)
-    .do();
-
-const mix = mixData.data.Get.Mix[0];
+const mix = await getMixById({
+    weaviateObjectId,
+});
 
 export const partial = true;
 ---
 
-<PlayerDetails {mix} {mixId} />
+<PlayerDetails {mix} />

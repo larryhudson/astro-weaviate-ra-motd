@@ -1,23 +1,6 @@
 ---
-import { Debug } from "astro:components";
 import PlayMixButton from "./PlayMixButton.astro";
 import RAImage from "./RAImage.astro";
-/*
-example mix:
-{
-  "_additional": {
-    "id": "2bc0e196-a498-4ff5-ab88-4113c121f679"
-  },
-  "blurb": "Two brilliantly all-over-the-shop hours, recorded live at last year's Love International.",
-  "content": "This mix, recorded live at Love International 2022, shows why <a target=\"_blank\" href=\"/dj/danielle\">Danielle</a> is one of the sharpest talents around right now. Enjoy two hours of red-hot, rhythmic house and techno.\n\n<div class=\"plyr\"><iframe width=\"464\" height=\"155\" scrolling=\"no\" frameborder=\"no\" allow=\"autoplay\" src=\"https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1436566738&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true\"></iframe></div>",
-  "contentUrl": "/news/78452",
-  "hyperlinkUrl": null,
-  "iframe": "<iframe width=\"464\" height=\"155\" scrolling=\"no\" frameborder=\"no\" allow=\"autoplay\" src=\"https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/1436566738&amp;color=%23ff5500&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;show_teaser=true&amp;visual=true\"></iframe>",
-  "imageUrl": "https://static.ra.co/images/news/2023/dj-danielle-motd.jpeg",
-  "mixId": "78452",
-  "title": "Mix Of The Day: Danielle"
-}
-*/
 const { mix } = Astro.props;
 ---
 
@@ -25,12 +8,11 @@ const { mix } = Astro.props;
 <PlayMixButton {mix} />
 
 <div class="image-and-text-flex">
-    <div>
-        <RAImage src={mix.imageUrl} height="200" width="200" quality="100" /><br
-        />
-    </div>
-    <div class="text">
-        <p><strong>{mix.blurb}</strong></p>
-        <div set:html={mix.content} />
-    </div>
+  <div>
+    <RAImage src={mix.imageUrl} height="200" width="200" quality="100" /><br />
+  </div>
+  <div class="text">
+    <p><strong>{mix.blurb}</strong></p>
+    <div set:html={mix.content} />
+  </div>
 </div>

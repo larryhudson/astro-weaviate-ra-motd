@@ -1,12 +1,12 @@
 ---
-import { weaviateClient } from "@src/lib/weaviate";
-import { Debug } from "astro:components";
+import { findMixes } from "@src/lib/weaviate/query";
 
 import Layout from "@src/components/Layout.astro";
-import MixesList from "@src/components/MixesList.astro";
+import MixListItem from "@src/components/MixListItem.astro";
+import Pagination from "@src/components/Pagination.astro";
 
 const searchQuery = Astro.url.searchParams.get("q");
-const negativeSearchQuery = Astro.url.searchParams.get("not");
+const excludeQuery = Astro.url.searchParams.get("not");
 const searchType = Astro.url.searchParams.get("type") || "hybrid";
 
 const pageNumStr = Astro.url.searchParams.get("page-num") || "1";
@@ -23,68 +23,21 @@ if (!searchQuery) {
 	};
 }
 
-const searchFields =
-	"mixId title textForEmbedding blurb imageUrl iframe hyperlinkUrl date";
-
-let weaviateSearch = weaviateClient.graphql
-	.get()
-	.withClassName("Mix")
-	.withFields(searchFields)
-	.withLimit(perPage)
-	.withOffset(offset);
-
-if (searchType === "hybrid") {
-	weaviateSearch = weaviateSearch.withHybrid({
-		query: searchQuery,
-	});
-} else {
-	const positiveConcepts = searchQuery.split(" AND ");
-	const negativeConcepts = negativeSearchQuery?.split(" AND ") || [];
-
-	weaviateSearch = weaviateSearch.withNearText({
-		concepts: positiveConcepts,
-		moveAwayFrom: {
-			concepts: negativeConcepts,
-			force: 1,
-		},
-	});
-}
-
-if (negativeSearchQuery) {
-}
-
-const searchData = await weaviateSearch.do();
-
-const mixes = searchData?.data?.Get?.Mix || [];
-
-const nextPageParams = Astro.url.searchParams;
-nextPageParams.set("page-num", String(pageNum + 1));
-const nextPageUrl = `/search?${nextPageParams.toString()}`;
-
-const previousPageParams = Astro.url.searchParams;
-previousPageParams.set("page-num", String(pageNum - 1));
-const previousPageUrl = `/search?${previousPageParams.toString()}`;
+const mixes = await findMixes({
+	nearText: searchQuery,
+	moveAwayFromText: excludeQuery,
+	searchType,
+	fields: "mixId title textForEmbedding blurb imageUrl iframe hyperlinkUrl date _additional { id }",
+	limit: perPage,
+	offset,
+});
 ---
 
-<Layout {searchType} {searchQuery} {negativeSearchQuery}>
+<Layout {searchType} {searchQuery} {excludeQuery} {perPage}>
 	<h2>Search results</h2>
-	<MixesList {mixes} />
-	{
-		pageNum > 1 && (
-			<a
-				href={previousPageUrl}
-				hx-boost="true"
-				hx-select="#page-container"
-				hx-target="#page-container"
-			>
-				Previous page
-			</a>
-		)
-	}
-	<a
-		href={nextPageUrl}
-		hx-boost="true"
-		hx-select="#page-container"
-		hx-target="#page-container">Next page</a
-	>
+	<ul class="mixes-list">
+		{mixes.map((mix) => <MixListItem {mix} />)}
+	</ul>
+
+	<Pagination {pageNum} />
 </Layout>

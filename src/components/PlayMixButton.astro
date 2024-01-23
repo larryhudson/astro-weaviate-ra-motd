@@ -5,7 +5,7 @@ const { mix } = Astro.props;
 {
     mix.iframe ? (
         <button
-            hx-get={`/mix/${mix.mixId}/play`}
+            hx-get={`/mix/${mix._additional.id}/play`}
             hx-target="#player-details"
             hx-swap="outerHTML"
             class="z-index-above-stretch-link"

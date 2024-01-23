@@ -1,0 +1,32 @@
+---
+const { pageNum } = Astro.props;
+console.log("pagination page number");
+console.log({ pageNum });
+// make a copy of the current url
+const nextPageUrl = new URL(Astro.url);
+nextPageUrl.searchParams.set("page-num", String(pageNum + 1));
+
+const previousPageUrl = new URL(Astro.url);
+previousPageUrl.searchParams.set("page-num", String(pageNum - 1));
+---
+
+<div>
+    {
+        pageNum > 1 && (
+            <a
+                href={previousPageUrl}
+                hx-boost="true"
+                hx-select="#page-container"
+                hx-target="#page-container"
+            >
+                Previous page
+            </a>
+        )
+    }
+    <a
+        href={nextPageUrl}
+        hx-boost="true"
+        hx-select="#page-container"
+        hx-target="#page-container">Next page</a
+    >
+</div>

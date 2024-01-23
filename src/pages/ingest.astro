@@ -1,6 +1,7 @@
 ---
-import fs from "node:fs";
 import { importMixesFromJson } from "@src/lib/weaviate/ingest_batch";
+
+// TODO: move this to a script
 
 if (Astro.request.method === "POST") {
     const jsonFilePath = import.meta.env.VITE_JSON_DATA_PATH;
