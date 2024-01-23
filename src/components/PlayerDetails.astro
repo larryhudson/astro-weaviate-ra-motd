@@ -11,7 +11,7 @@ const { mix } = Astro.props;
                     hx-boost="true"
                     hx-select="main"
                     hx-target="main"
-                    href={`/mix/${mix.mixId}`}
+                    href={`/mix/${mix._additional.id}`}
                 >
                     {mix.title}
                 </a>
